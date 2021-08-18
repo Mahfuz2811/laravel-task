@@ -3,6 +3,7 @@ version: '2'
 services:
     nginx:
         image: nginx:1.13.6
+        container_name: laravel-task-nginx
         ports:
             - "8001:80"
         volumes:
@@ -14,6 +15,7 @@ services:
         build:
             context: .
             dockerfile: ./docker/php/Dockerfile
+        container_name: laravel-task-php
         expose:
             - 9000
         volumes:
@@ -23,6 +25,7 @@ services:
 
     postgres:
         image: postgres:10.4-alpine
+        container_name: laravel-task-postgres
         ports:
             - "5432:5432"
         volumes:
