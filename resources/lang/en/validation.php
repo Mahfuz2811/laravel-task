@@ -135,6 +135,8 @@ return [
     |
     */
 
+    'valid_url' => 'The :attribute is not an active url.',
+
     'custom' => [
         'attribute-name' => [
             'rule-name' => 'custom-message',
