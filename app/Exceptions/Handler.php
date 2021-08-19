@@ -48,6 +48,14 @@ class Handler extends ExceptionHandler
 
     public function render($request, Throwable $exception)
     {
+        if ($request->wantsJson()) {
+            return $this->handleApiException($request, $exception);
+        }
+        return parent::render($request, $exception);
+    }
+
+    private function handleApiException($request, $exception)
+    {
         switch (true) {
             case $exception instanceof QueryException:
                 return $this->responder([
