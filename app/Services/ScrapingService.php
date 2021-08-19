@@ -3,12 +3,21 @@
 namespace App\Services;
 
 use App\Models\ScrapingData;
+use App\Repositories\ScrapingRepository;
 use Goutte\Client;
 use Throwable;
 
 class ScrapingService
 {
-    public function scrapingData($url): bool
+    private $scrapingRepository;
+
+    public function __construct(ScrapingRepository $scrapingRepository)
+    {
+
+        $this->scrapingRepository = $scrapingRepository;
+    }
+
+    public function scrapingData($url, $contentId): bool
     {
         $client = new Client();
         $crawler = $client->request('GET', $url);
@@ -37,19 +46,25 @@ class ScrapingService
         });
 
         $content = implode(",", $para);
+        $data = [
+            'url' => $url,
+            'title' => $title,
+            'content' => $content,
+            'image_url' => $image,
+            'content_id' => $contentId
+        ];
 
         try {
-            $scraping = ScrapingData::create([
-                'url' => $url,
-                'title' => $title,
-                'content' => $content,
-                'image_url' => $image
-            ]);
-
-            return true;
+            $scraping = $this->scrapingRepository->store($data);
         } catch (Throwable $t) {
             return false;
         }
+
+        if (!$scraping) {
+            return false;
+        }
+
+        return true;
 
     }
 }

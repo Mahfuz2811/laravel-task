@@ -16,4 +16,17 @@ class Content extends Model
     {
         return $this->belongsTo(Pocket::class, 'pocket_id');
     }
+
+    public function scrapingData()
+    {
+        return $this->hasOne(ScrapingData::class, 'content_id');
+    }
+
+    protected static function boot() {
+        parent::boot();
+
+        static::deleted(function ($content) {
+            $content->scrapingData()->delete();
+        });
+    }
 }

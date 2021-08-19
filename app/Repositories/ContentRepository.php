@@ -6,9 +6,9 @@ use App\Models\Content;
 
 class ContentRepository
 {
-    public function all(int $pocketId)
+    public function all(int $pocketId, $perPage = 10)
     {
-        return Content::where('pocket_id', $pocketId)->get();
+        return Content::where('pocket_id', $pocketId)->paginate($perPage);
     }
 
     public function store(array $data)

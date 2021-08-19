@@ -9,6 +9,6 @@ class ScrapingEventListener
 {
     public function handle(ScrapingEvent $event)
     {
-        dispatch(new ScrapingJob($event->url));
+        dispatch(new ScrapingJob($event->url, $event->contentId));
     }
 }

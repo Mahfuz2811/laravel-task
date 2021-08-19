@@ -7,10 +7,12 @@ use App\Services\ScrapingService;
 class ScrapingJob extends BaseJob
 {
     private $url;
+    private $contentId;
 
-    public function __construct($url, $tag = 'scraping-site')
+    public function __construct($url, $contentId, $tag = 'scraping-site')
     {
         $this->url = $url;
+        $this->contentId = $contentId;
         $this->tries = 1;
         $this->tag = $tag;
     }
@@ -19,7 +21,7 @@ class ScrapingJob extends BaseJob
     {
         $this->logger(['attempt' => $this->attempts()]);
 
-        $response = $scrapingService->scrapingData($this->url);
+        $response = $scrapingService->scrapingData($this->url, $this->contentId);
         if (!$response) {
             $this->release(20);
             return;

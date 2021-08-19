@@ -5,6 +5,8 @@ namespace App\Http\Controllers\Api\V1;
 use App\Events\ScrapingEvent;
 use App\Http\Controllers\Api\ApiController;
 use App\Http\Requests\ContentRequest;
+use App\Models\Content;
+use App\Models\Pocket;
 use App\Services\ContentService;
 
 class ContentController extends ApiController
@@ -32,7 +34,13 @@ class ContentController extends ApiController
 
     public function store(ContentRequest $request, $pocketId)
     {
-        $data = $request->only('url');
+        $pocket = Pocket::find($pocketId);
+        if (!$pocket) {
+            return $this->respondError(['error' => true, 'message' => 'Pocket not found'], 404);
+        }
+
+        $url = $request->get('url');
+        $data['url'] = $url;
         $data['pocket_id'] = $pocketId;
 
         $response = $this->contentService->store($data);
@@ -40,13 +48,19 @@ class ContentController extends ApiController
             return $this->respondError(['error' => true, 'message' => 'Unable to create content']);
         }
 
-        event(new ScrapingEvent($request->get('url')));
+        $contentId = $response->id;
+        event(new ScrapingEvent($url, $contentId));
 
         return $this->respondSuccess(['error' => false, 'message' => 'Content created successfully']);
     }
 
     public function destroy($contentId)
     {
+        $content = Content::find($contentId);
+        if (!$content) {
+            return $this->respondError(['error' => true, 'message' => 'Content not found'], 404);
+        }
+
         $response = $this->contentService->delete($contentId);
         if (!$response) {
             return $this->respondError(['error' => true, 'message' => 'Unable to delete content']);

@@ -48,7 +48,6 @@ class Handler extends ExceptionHandler
 
     public function render($request, Throwable $exception)
     {
-
         switch (true) {
             case $exception instanceof QueryException:
                 return $this->responder([

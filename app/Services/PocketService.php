@@ -20,12 +20,12 @@ class PocketService
     public function store(array $data): bool
     {
         try {
-            $user = $this->pocketRepository->store($data);
+            $pocket = $this->pocketRepository->store($data);
         } catch (Throwable $t) {
             return false;
         }
 
-        if (!$user) {
+        if (!$pocket) {
             return false;
         }
 

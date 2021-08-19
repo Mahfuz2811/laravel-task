@@ -31,19 +31,19 @@ class ContentService
     public function store(array $data)
     {
         try {
-            $user = $this->contentRepository->store($data);
+            $content = $this->contentRepository->store($data);
         } catch (Throwable $t) {
             return false;
         }
 
-        if (!$user) {
+        if (!$content) {
             return false;
         }
 
-        return true;
+        return $content;
     }
 
-    public function delete($contentId)
+    public function delete($contentId): bool
     {
         try {
             $content = $this->contentRepository->delete($contentId);
