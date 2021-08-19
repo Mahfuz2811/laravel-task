@@ -26,6 +26,9 @@ class AppServiceProvider extends ServiceProvider
     {
         Validator::extend('valid_url', function ($attribute, $value, $parameters, $validator) {
             $array = @get_headers($value);
+            if (!$array) {
+                return false;
+            }
             $string = $array[0];
             return strpos($string,"200");
         });

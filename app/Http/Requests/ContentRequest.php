@@ -14,7 +14,7 @@ class ContentRequest extends FormRequest
     public function rules()
     {
         return [
-            'url' => ['required', 'string', 'valid_url']
+            'url' => ['required', 'string', 'url', 'valid_url']
         ];
     }
 }

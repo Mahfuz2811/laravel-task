@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Api\V1;
 
+use App\Events\ScrapingEvent;
 use App\Http\Controllers\Api\ApiController;
 use App\Http\Requests\ContentRequest;
 use App\Services\ContentService;
@@ -38,6 +39,8 @@ class ContentController extends ApiController
         if (!$response) {
             return $this->respondError(['error' => true, 'message' => 'Unable to create content']);
         }
+
+        event(new ScrapingEvent($request->get('url')));
 
         return $this->respondSuccess(['error' => false, 'message' => 'Content created successfully']);
     }
