@@ -2,6 +2,7 @@
 
 namespace App\Providers;
 
+use Illuminate\Pagination\Paginator;
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Support\Facades\Validator;
 
@@ -32,5 +33,7 @@ class AppServiceProvider extends ServiceProvider
             $string = $array[0];
             return strpos($string,"200");
         });
+
+        Paginator::useBootstrap();
     }
 }

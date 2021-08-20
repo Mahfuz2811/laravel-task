@@ -7,4 +7,4 @@ Route::get('/', function () {
     return view('welcome');
 });
 
-Route::get('pockets', [PocketController::class, 'index']);
+Route::resource('pockets', PocketController::class)->only(['index', 'show']);

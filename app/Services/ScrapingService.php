@@ -2,7 +2,6 @@
 
 namespace App\Services;
 
-use App\Models\ScrapingData;
 use App\Repositories\ScrapingRepository;
 use Goutte\Client;
 use Throwable;
