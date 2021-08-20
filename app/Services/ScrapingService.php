@@ -64,6 +64,5 @@ class ScrapingService
         }
 
         return true;
-
     }
 }

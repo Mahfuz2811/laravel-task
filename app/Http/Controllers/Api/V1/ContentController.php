@@ -47,7 +47,7 @@ class ContentController extends ApiController
         $contentId = $response->id;
         event(new ScrapingEvent($request->get('url'), $contentId));
 
-        return $this->respondSuccess(['error' => false, 'message' => 'Content created successfully']);
+        return $this->respondSuccess(['error' => false, 'message' => 'Content created successfully'], 201);
     }
 
     public function destroy($contentId)
@@ -62,6 +62,6 @@ class ContentController extends ApiController
             return $this->respondError(['error' => true, 'message' => 'Unable to delete content']);
         }
 
-        return $this->respondSuccess(['error' => false, 'message' => 'Content deleted successfully']);
+        return $this->respondSuccess(['error' => false, 'message' => 'Content deleted successfully'], 202);
     }
 }

@@ -18,13 +18,11 @@ class PocketController extends ApiController
 
     public function store(PocketRequest $request)
     {
-        //$data = $request->only('title');
-
         $response = $this->pocketService->store($request->toArray());
         if (!$response) {
             return $this->respondError(['error' => true, 'message' => 'Unable to create pocket']);
         }
 
-        return $this->respondSuccess(['error' => false, 'message' => 'Pocket created successfully']);
+        return $this->respondSuccess(['error' => false, 'message' => 'Pocket created successfully'], 201);
     }
 }

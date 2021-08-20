@@ -11,12 +11,12 @@ class ContentRepository
         return Content::where('pocket_id', $pocketId)->paginate($perPage);
     }
 
-    public function store(array $data)
+    public function store(array $data): Content
     {
         return Content::create($data);
     }
 
-    public function delete(int $contentId)
+    public function delete(int $contentId): bool
     {
         $content = Content::find($contentId);
         if ($content) {
