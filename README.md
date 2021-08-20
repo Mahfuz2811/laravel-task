@@ -18,14 +18,16 @@ This project contains,
 - `cp .env.example .env`.
 - Make the required changes to your `.env`.
 - `docker-compose up -d --build` to build your containers.
-- Run `php artisan key:generate` to generate application key.
-- Loading `http://127.0.0.1:{NGINX_PORT}` in your browser. Here I have used `8001` port. If you don't change port in `docker-compose.yml` file make sure `8001` port is free.
-- If you don't have `composer` locally, then `exec`-ing to php container after containers are up and install the dependencies will work. Just restart the containers.
-- For setup your database, `exec`-ing to php container `docker-compose exec php bash` and run `php artisan migrate`.
+- After build `exec`-ing to php container by running cmd `docker-compose exec php bash`
+- And inside container run the following cmd - 
+  - `composer install`
+  - `php artisan key:generate`
+  - `php artisan migrate`
 - If you don't change anything in your `docker-compose.yml` for postgres, then don't need to change anything in your env for database connection.
-- For working `queue` `exec`-ing to php container and run `php artisan queue:work`
-- For api testing, pass `Accept: application/json` in header.
+- For working `queue` run `php artisan queue:work` inside container
+- Loading `http://127.0.0.1:{NGINX_PORT}` in your browser. Here I have used `8001` port. If you don't change port in `docker-compose.yml` file make sure `8001` port is free.
 - Browse `http://127.0.0.1:{NGINX_PORT}/pockets` to get all pocket data.
+- For api testing, pass `Accept: application/json` in header.
 
 ## Postman collection link
 https://www.getpostman.com/collections/2f3c7585f90740117ea8

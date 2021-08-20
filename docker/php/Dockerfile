@@ -7,6 +7,9 @@ RUN apt-get update
 # Install dependencies
 RUN apt-get install -y \
     vim \
+    git \
+    zip \
+    unzip \
     curl
 
 # Install Postgre PDO
