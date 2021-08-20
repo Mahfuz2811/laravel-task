@@ -1,0 +1,17 @@
+.heading-image {
+    text-align: center;
+    margin-bottom: 20px;
+}
+li {
+    border-radius: 0 !important;
+}
+.cursor {
+    cursor: pointer;
+}
+a {
+    color: #000000;
+    text-decoration: none !important;
+}
+.active a{
+    color: #ffffff;
+}
