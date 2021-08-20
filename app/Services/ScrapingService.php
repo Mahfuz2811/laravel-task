@@ -38,7 +38,7 @@ class ScrapingService
         $images = $crawler->filter('img')->each(function ($node) {
             return $node->attr('src');
         });
-        $image = $images[0] ?? ''; // consider first image is heading image
+        $image = $images[0] ?? ''; // consider first image as a heading image
 
         $para = $crawler->filter('p')->each(function ($node) {
             return $node->text();

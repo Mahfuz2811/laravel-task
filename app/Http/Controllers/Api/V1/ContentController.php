@@ -11,14 +11,10 @@ use App\Services\ContentService;
 
 class ContentController extends ApiController
 {
-    /**
-     * @var ContentService
-     */
     private $contentService;
 
     public function __construct(ContentService $contentService)
     {
-
         $this->contentService = $contentService;
     }
 
@@ -62,6 +58,6 @@ class ContentController extends ApiController
             return $this->respondError(['error' => true, 'message' => 'Unable to delete content']);
         }
 
-        return $this->respondSuccess(['error' => false, 'message' => 'Content deleted successfully'], 202);
+        return $this->respondSuccess(['error' => false, 'message' => 'Content deleted successfully']);
     }
 }

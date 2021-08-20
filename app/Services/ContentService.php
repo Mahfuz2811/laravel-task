@@ -8,9 +8,6 @@ use Throwable;
 
 class ContentService
 {
-    /**
-     * @var ContentRepository
-     */
     private $contentRepository;
 
     public function __construct(ContentRepository $contentRepository)

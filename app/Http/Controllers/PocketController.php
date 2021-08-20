@@ -15,6 +15,7 @@ class PocketController extends Controller
             ->orderBy('pocket_id', 'asc')
             ->paginate(10)
             ->appends(request()->query());
+
         return view('pages.pocket.index', compact('contents', 'pockets', 'pocketId'));
     }
 
@@ -26,6 +27,7 @@ class PocketController extends Controller
             ->orderBy('pocket_id', 'asc')
             ->paginate(10)
             ->appends(request()->query());
+
         return view('pages.pocket.index', compact('contents', 'pockets', 'pocketId'));
     }
 }
