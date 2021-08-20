@@ -39,17 +39,13 @@ class ContentController extends ApiController
             return $this->respondError(['error' => true, 'message' => 'Pocket not found'], 404);
         }
 
-        $url = $request->get('url');
-        $data['url'] = $url;
-        $data['pocket_id'] = $pocketId;
-
-        $response = $this->contentService->store($data);
+        $response = $this->contentService->store($request->toArray(), $pocketId);
         if (!$response) {
             return $this->respondError(['error' => true, 'message' => 'Unable to create content']);
         }
 
         $contentId = $response->id;
-        event(new ScrapingEvent($url, $contentId));
+        event(new ScrapingEvent($request->get('url'), $contentId));
 
         return $this->respondSuccess(['error' => false, 'message' => 'Content created successfully']);
     }

@@ -2,8 +2,8 @@
 
 namespace App\Services;
 
+use App\DTO\PocketDto;
 use App\Repositories\PocketRepository;
-use Throwable;
 
 class PocketService
 {
@@ -14,20 +14,11 @@ class PocketService
         $this->pocketRepository = $pocketRepository;
     }
 
-    /**
-     * @throws Throwable
-     */
-    public function store(array $data): bool
+    public function store(array $request): bool
     {
-        try {
-            $pocket = $this->pocketRepository->store($data);
-        } catch (Throwable $t) {
-            return false;
-        }
+        $pocket = PocketDto::createFromArray($request);
 
-        if (!$pocket) {
-            return false;
-        }
+        $this->pocketRepository->store($pocket->toArray());
 
         return true;
     }

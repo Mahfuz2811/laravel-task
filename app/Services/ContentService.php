@@ -2,6 +2,7 @@
 
 namespace App\Services;
 
+use App\DTO\ContentDto;
 use App\Repositories\ContentRepository;
 use Throwable;
 
@@ -28,19 +29,11 @@ class ContentService
         return $data;
     }
 
-    public function store(array $data)
+    public function store(array $request, $pocketId)
     {
-        try {
-            $content = $this->contentRepository->store($data);
-        } catch (Throwable $t) {
-            return false;
-        }
+        $contentData = ContentDto::createFromArray($request, $pocketId);
 
-        if (!$content) {
-            return false;
-        }
-
-        return $content;
+        return $this->contentRepository->store($contentData->toArray());
     }
 
     public function delete($contentId): bool
