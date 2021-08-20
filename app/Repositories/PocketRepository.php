@@ -6,8 +6,14 @@ use App\Models\Pocket;
 
 class PocketRepository
 {
-    public function store(array $data): Pocket
+    public function store(array $data): void
     {
-        return Pocket::create($data);
+        Pocket::create($data);
+    }
+
+    // for view part
+    public function getPockets()
+    {
+        return Pocket::all();
     }
 }

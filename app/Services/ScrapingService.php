@@ -12,7 +12,6 @@ class ScrapingService
 
     public function __construct(ScrapingRepository $scrapingRepository)
     {
-
         $this->scrapingRepository = $scrapingRepository;
     }
 

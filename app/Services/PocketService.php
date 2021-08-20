@@ -14,12 +14,16 @@ class PocketService
         $this->pocketRepository = $pocketRepository;
     }
 
-    public function store(array $request): bool
+    public function store(array $request): void
     {
         $pocket = PocketDto::createFromArray($request);
 
         $this->pocketRepository->store($pocket->toArray());
+    }
 
-        return true;
+    // for view part
+    public function getPockets()
+    {
+        return $this->pocketRepository->getPockets();
     }
 }

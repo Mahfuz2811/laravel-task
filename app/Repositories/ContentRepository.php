@@ -2,13 +2,14 @@
 
 namespace App\Repositories;
 
+use App\DTO\PaginationDto;
 use App\Models\Content;
 
 class ContentRepository
 {
-    public function all(int $pocketId, $perPage = 10)
+    public function all(PaginationDto $pagination, int $pocketId)
     {
-        return Content::where('pocket_id', $pocketId)->paginate($perPage);
+        return Content::with(['pocket', 'scrapingData'])->where('pocket_id', $pocketId)->paginate($pagination->getPerPage(), ['*'], 'page', $pagination->getPage());
     }
 
     public function store(array $data): Content
@@ -16,13 +17,27 @@ class ContentRepository
         return Content::create($data);
     }
 
-    public function delete(int $contentId): bool
+    public function delete(int $contentId): void
     {
-        $content = Content::find($contentId);
-        if ($content) {
-            return $content->delete();
-        }
+        $content = Content::findOrFail($contentId);
+        $content->delete();
+    }
 
-        return false;
+    // for view part
+    public function getContents(int $limit)
+    {
+        return Content::with('pocket', 'scrapingData')
+            ->orderBy('pocket_id', 'asc')
+            ->paginate($limit)
+            ->appends(request()->query());
+    }
+
+    public function getContentsByPocket(int $pocketId, int $limit)
+    {
+        return Content::with('pocket', 'scrapingData')
+            ->where('pocket_id', $pocketId)
+            ->orderBy('pocket_id', 'asc')
+            ->paginate($limit)
+            ->appends(request()->query());
     }
 }

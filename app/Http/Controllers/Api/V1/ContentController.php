@@ -2,12 +2,12 @@
 
 namespace App\Http\Controllers\Api\V1;
 
-use App\Events\ScrapingEvent;
+use App\Helpers\Paginator;
 use App\Http\Controllers\Api\ApiController;
 use App\Http\Requests\ContentRequest;
-use App\Models\Content;
-use App\Models\Pocket;
+use App\Http\Resources\ContentResource;
 use App\Services\ContentService;
+use Illuminate\Http\Request;
 
 class ContentController extends ApiController
 {
@@ -18,45 +18,29 @@ class ContentController extends ApiController
         $this->contentService = $contentService;
     }
 
-    public function index($pocketId)
+    public function index(Request $request, $pocketId)
     {
-        $response = $this->contentService->getPocketContent($pocketId);
-        if (!$response) {
-            return $this->respondError(['error' => true, 'message' => 'Unable to fetch content']);
-        }
+        $response = $this->contentService->getPocketContent($request->toArray(), $pocketId);
 
-        return $this->respondSuccess(['error' => false, 'data' => $response]);
+        return $this->respondSuccess([
+            'error' => false,
+            'data' => [
+                'content' => ContentResource::collection($response),
+                'pagination' => Paginator::simplePaginationDetails($response)
+            ]
+        ]);
     }
 
     public function store(ContentRequest $request, $pocketId)
     {
-        $pocket = Pocket::find($pocketId);
-        if (!$pocket) {
-            return $this->respondError(['error' => true, 'message' => 'Pocket not found'], 404);
-        }
-
-        $response = $this->contentService->store($request->toArray(), $pocketId);
-        if (!$response) {
-            return $this->respondError(['error' => true, 'message' => 'Unable to create content']);
-        }
-
-        $contentId = $response->id;
-        event(new ScrapingEvent($request->get('url'), $contentId));
+        $this->contentService->store($request->toArray(), $pocketId);
 
         return $this->respondSuccess(['error' => false, 'message' => 'Content created successfully'], 201);
     }
 
     public function destroy($contentId)
     {
-        $content = Content::find($contentId);
-        if (!$content) {
-            return $this->respondError(['error' => true, 'message' => 'Content not found'], 404);
-        }
-
-        $response = $this->contentService->delete($contentId);
-        if (!$response) {
-            return $this->respondError(['error' => true, 'message' => 'Unable to delete content']);
-        }
+        $this->contentService->delete($contentId);
 
         return $this->respondSuccess(['error' => false, 'message' => 'Content deleted successfully']);
     }

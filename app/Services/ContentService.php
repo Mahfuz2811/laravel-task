@@ -3,6 +3,8 @@
 namespace App\Services;
 
 use App\DTO\ContentDto;
+use App\DTO\PaginationDto;
+use App\Events\ScrapingEvent;
 use App\Repositories\ContentRepository;
 use Throwable;
 
@@ -15,36 +17,34 @@ class ContentService
         $this->contentRepository = $contentRepository;
     }
 
-    public function getPocketContent($pocketId)
+    public function getPocketContent(array $request, $pocketId)
     {
-        try {
-            $data = $this->contentRepository->all($pocketId);
-        } catch (Throwable $t) {
-            return false;
-        }
-
-        return $data;
+        $pagination = PaginationDto::createFromArray($request, 10);
+        return $this->contentRepository->all($pagination, $pocketId);
     }
 
     public function store(array $request, $pocketId)
     {
         $contentData = ContentDto::createFromArray($request, $pocketId);
 
-        return $this->contentRepository->store($contentData->toArray());
+        $content = $this->contentRepository->store($contentData->toArray());
+
+        event(new ScrapingEvent($content->url, $content->id));
     }
 
-    public function delete($contentId): bool
+    public function delete($contentId): void
     {
-        try {
-            $content = $this->contentRepository->delete($contentId);
-        } catch (Throwable $t) {
-            return false;
-        }
+        $this->contentRepository->delete($contentId);
+    }
 
-        if (!$content) {
-            return false;
-        }
+    // for view part
+    public function getContents($limit = 10)
+    {
+        return $this->contentRepository->getContents($limit);
+    }
 
-        return true;
+    public function getContentsByPocket(int $pocketId, $limit = 10)
+    {
+        return $this->contentRepository->getContentsByPocket($pocketId, $limit);
     }
 }
